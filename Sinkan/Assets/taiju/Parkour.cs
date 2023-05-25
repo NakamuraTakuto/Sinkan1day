@@ -8,12 +8,16 @@ public class Parkour : MonoBehaviour
     /// <summary>左右移動する力</summary>
     [SerializeField] float YmovePower = 5f;
     [SerializeField] float XmovePower = 5f;
+    [SerializeField] GameObject _actionPanel;
+    bool _actionTrriger = false;
     //   [SerializeField] Countdown3 Countdown3;
     Rigidbody2D m_rb = default;
+    Animator _anim;
     [SerializeField, Tooltip("水平方向の入力値")] float m_h;
     void Start()
     {
         m_rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -22,16 +26,33 @@ public class Parkour : MonoBehaviour
         // 各種入力を受け取る
         // 入力を受け取る
         m_h = Input.GetAxisRaw("Vertical");
+        _anim.SetFloat("Speed", XmovePower);
+        var xyPower = new Vector2(XmovePower, YmovePower * m_h);
+        m_rb.velocity = xyPower;
 
-        m_rb.velocity = new Vector2(XmovePower, YmovePower * m_h);
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space) && _actionTrriger)
         {
-            //         Countdown3.StylishgaugePlus();
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            //ここでヒロケンを呼び出す
         }
+        if(!_actionTrriger)
+        {
+            gameObject.GetComponent<Collider2D>().enabled = true;
+        }
+
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        OnTriggerStay(other);
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            _actionTrriger = true;
+            _actionPanel.SetActive(true);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        _actionTrriger = false;
+        _actionPanel.SetActive(false);
     }
 }
