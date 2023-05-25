@@ -19,7 +19,9 @@ public class Countdown3 : MonoBehaviour
     [SerializeField] Text _stylishText;
     [SerializeField] Text _scoreText;
     [SerializeField] AudioSource _stylishAudioSource;
+    [SerializeField] AudioSource _bgmAudioSource;
     [SerializeField] AudioClip _stylishAudioClip;
+    [SerializeField] AudioClip _bgm;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +47,8 @@ public class Countdown3 : MonoBehaviour
         }
 
         UIs();
+
+        
     }
 
     private void UIs()
