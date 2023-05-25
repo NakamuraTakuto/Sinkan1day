@@ -9,6 +9,8 @@ public class Parkour : MonoBehaviour
     [SerializeField] float YmovePower = 5f;
     [SerializeField] float XmovePower = 5f;
     [SerializeField] GameObject _actionPanel;
+    [SerializeField] GameObject _cleartPanel;
+    [SerializeField] GameObject _overPanel;
     bool _actionTrriger = false;
     //   [SerializeField] Countdown3 Countdown3;
     Rigidbody2D m_rb = default;
@@ -33,7 +35,7 @@ public class Parkour : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && _actionTrriger)
         {
             gameObject.GetComponent<Collider2D>().enabled = false;
-            //Ç±Ç±Ç≈ÉqÉçÉPÉìÇåƒÇ—èoÇ∑
+            GetComponent<Jumping>().StartJump();
         }
         if(!_actionTrriger)
         {
@@ -42,6 +44,19 @@ public class Parkour : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            _overPanel.SetActive(true);
+            gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.tag == "Finish")
+        {
+            _cleartPanel.SetActive(true);
+            gameObject.SetActive(false);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Obstacle")
